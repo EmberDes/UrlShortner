@@ -4,6 +4,7 @@ import Dashboard from "./pages/Dashboard"
 import Analytics from "./pages/Analytics"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
+import { JSX } from "react"
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const isAuth = localStorage.getItem("auth")
