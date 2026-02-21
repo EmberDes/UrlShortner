@@ -17,13 +17,15 @@ class User(db.Model):
         return bcrypt.check_password_hash(self.password_hash, password)
 
 
+
 class URL(db.Model):
     id = db.Column(db.String, primary_key=True, default=lambda: str(uuid.uuid4()))
     original_url = db.Column(db.Text, nullable=False)
     short_code = db.Column(db.String(10), unique=True, nullable=False, index=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    user_id = db.Column(db.String, db.ForeignKey("user.id"), nullable=False)
+    expiry_date = db.Column(db.DateTime, nullable=True)
 
+    user_id = db.Column(db.String, db.ForeignKey("user.id"), nullable=False)
     clicks = db.relationship("Click", backref="url", lazy=True)
 
 

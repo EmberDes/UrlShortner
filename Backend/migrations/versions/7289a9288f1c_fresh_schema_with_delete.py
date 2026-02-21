@@ -1,8 +1,8 @@
-"""initial
+"""Fresh Schema with delete
 
-Revision ID: 91d3d35058da
+Revision ID: 7289a9288f1c
 Revises: 
-Create Date: 2026-02-20 22:27:26.069835
+Create Date: 2026-02-21 15:01:12.427744
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '91d3d35058da'
+revision = '7289a9288f1c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -31,6 +31,7 @@ def upgrade():
     sa.Column('original_url', sa.Text(), nullable=False),
     sa.Column('short_code', sa.String(length=10), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('expiry_date', sa.DateTime(), nullable=True),
     sa.Column('user_id', sa.String(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')

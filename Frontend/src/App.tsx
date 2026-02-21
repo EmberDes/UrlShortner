@@ -7,7 +7,7 @@ import Register from "./pages/Register"
 import { JSX } from "react"
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
-  const isAuth = localStorage.getItem("auth")
+  const isAuth = localStorage.getItem("token")
   return isAuth ? children : <Navigate to="/login" />
 }
 

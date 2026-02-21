@@ -2,18 +2,26 @@ import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts"
 
 import { Typography, Paper } from "@mui/material"
 import { ResponsiveContainer } from "recharts"
+import { useState,useEffect } from "react"  
+import API from "../api"
 
-const data = [
-  { date: "Mon", clicks: 120 },
-  { date: "Tue", clicks: 210 },
-  { date: "Wed", clicks: 150 },
-  { date: "Thu", clicks: 278 },
-  { date: "Fri", clicks: 189 },
-  { date: "Sat", clicks: 239 },
-  { date: "Sun", clicks: 349 },
-]
+
+
 
 export default function Analytics() {
+  const [data, setData] = useState([])
+
+    useEffect(() => {
+      const fetchAnalytics = async () => {
+        const response = await API.get("/analytics/daily")
+        setData(response.data)
+      }
+      fetchAnalytics()
+    }, [])
+
+
+
+
   return (
     <>
       <Typography variant="h4" gutterBottom>

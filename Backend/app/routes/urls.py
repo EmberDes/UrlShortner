@@ -1,11 +1,17 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
+
 from app import db
 from app.models import URL
 import string
 import random
 from flask import redirect, request
 from app.models import Click
+
+from sqlalchemy import func
+from datetime import datetime
+
+
 
 url_bp = Blueprint("urls", __name__)
 
@@ -14,27 +20,31 @@ def generate_short_code(length=6):
     return "".join(random.choice(characters) for _ in range(length))
 
 
+
 @url_bp.route("/", methods=["POST"])
 @jwt_required()
 def create_url():
     data = request.get_json()
+
     original_url = data.get("original_url")
+    custom_code = data.get("custom_code")
+    expiry_date = data.get("expiry_date")
 
     if not original_url:
         return jsonify({"msg": "Original URL required"}), 400
 
-    short_code = generate_short_code()
+    short_code = custom_code or generate_short_code()
 
-    # prevent collision
-    while URL.query.filter_by(short_code=short_code).first():
-        short_code = generate_short_code()
+    if URL.query.filter_by(short_code=short_code).first():
+        return jsonify({"msg": "Short code already exists"}), 400
 
     user_id = get_jwt_identity()
 
     new_url = URL(
         original_url=original_url,
         short_code=short_code,
-        user_id=user_id
+        user_id=user_id,
+        expiry_date=datetime.fromisoformat(expiry_date) if expiry_date else None
     )
 
     db.session.add(new_url)
@@ -51,19 +61,33 @@ def create_url():
 def get_user_urls():
     user_id = get_jwt_identity()
 
-    urls = URL.query.filter_by(user_id=user_id).all()
+    results = (
+        db.session.query(
+            URL,
+            func.count(Click.id).label("click_count"),
+            func.count(func.distinct(Click.ip_address)).label("unique_visitors")
+        )
+        .outerjoin(Click)
+        .filter(URL.user_id == user_id)
+        .group_by(URL.id)
+        .all()
+    )
 
-    result = [
+    data = [
         {
             "id": url.id,
             "original_url": url.original_url,
             "short_code": url.short_code,
-            "created_at": url.created_at
+            "created_at": url.created_at,
+            "click_count": click_count,
+            "unique_visitors": unique_visitors
         }
-        for url in urls
+        for url, click_count, unique_visitors in results
     ]
 
-    return jsonify(result), 200
+    return jsonify(data)
+
+   
 
 
 @url_bp.route("/r/<short_code>", methods=["GET"])
