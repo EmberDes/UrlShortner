@@ -1,1 +1,18 @@
-.venv
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual Environment
+.venv/
+.env
+
+# Database
+*.db
+instance/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
