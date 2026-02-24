@@ -6,8 +6,9 @@ import { Outlet } from "react-router-dom"
 export default function MainLayout() {
   return (
     <Box sx={{ display: "flex" }}>
-      <Topbar />
       <Sidebar />
+      <Topbar />
+      
       <Box component="main" sx={{ flexGrow: 1, p: 4 }}>
         <Toolbar />
         <Outlet />

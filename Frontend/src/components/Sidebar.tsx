@@ -12,44 +12,42 @@ import LinkIcon from "@mui/icons-material/Link"
 import { useNavigate } from "react-router-dom"
 
 const drawerWidth = 240
+const collapsedWidth = 70
 
-export default function Sidebar() {
+export default function Sidebar({ open }: any) {
   const navigate = useNavigate()
 
   return (
     <Drawer
       variant="permanent"
       sx={{
-        width: drawerWidth,
+        width: open ? drawerWidth : collapsedWidth,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: drawerWidth,
-          boxSizing: "border-box",
+          width: open ? drawerWidth : collapsedWidth,
+          transition: "width 0.3s",
+          overflowX: "hidden",
         },
       }}
     >
       <Toolbar />
+
       <List>
         <ListItemButton onClick={() => navigate("/")}>
           <ListItemIcon>
             <DashboardIcon />
           </ListItemIcon>
-          <ListItemText primary="Dashboard" />
+          {open && <ListItemText primary="Dashboard" />}
         </ListItemButton>
 
         <ListItemButton onClick={() => navigate("/analytics")}>
           <ListItemIcon>
             <AnalyticsIcon />
           </ListItemIcon>
-          <ListItemText primary="Analytics" />
+          {open && <ListItemText primary="Analytics" />}
         </ListItemButton>
 
-        <ListItemButton>
-          <ListItemIcon>
-            <LinkIcon />
-          </ListItemIcon>
-          <ListItemText primary="My Links" />
-        </ListItemButton>
+        
       </List>
     </Drawer>
   )
