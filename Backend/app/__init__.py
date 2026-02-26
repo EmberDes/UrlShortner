@@ -9,6 +9,7 @@ from flask_cors import CORS
 from app.routes.auth import auth_bp
 from app.routes.urls import url_bp
 from app.routes.analytics import analytics_bp
+from app.extensions import db, migrate, bcrypt, jwt
 
 
 db = SQLAlchemy()
@@ -26,10 +27,6 @@ def create_app():
 
 
 
-    db.init_app(app)
-    migrate.init_app(app, db)
-    bcrypt.init_app(app)
-    jwt.init_app(app)
 
     
 
