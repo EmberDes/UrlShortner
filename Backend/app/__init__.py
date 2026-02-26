@@ -1,7 +1,8 @@
-from flask import Flask
+from flask import Flask, app
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
+from sqlalchemy import text
 from flask_jwt_extended import JWTManager
 from config import Config
 from flask_cors import CORS
@@ -36,13 +37,16 @@ def create_app():
     app.register_blueprint(url_bp, url_prefix="/api/urls")
     app.register_blueprint(analytics_bp, url_prefix="/api/analytics")
 
+    from sqlalchemy import text
+
     @app.route("/health")
     def health():
-            return {"status": "Backend running"}
+        return {"status": "Backend running"}
+
     @app.route("/db-test")
     def db_test():
         try:
-            db.session.execute("SELECT 1")
+            db.session.execute(text("SELECT 1"))
             return {"db": "connected"}
         except Exception as e:
             return {"error": str(e)}
