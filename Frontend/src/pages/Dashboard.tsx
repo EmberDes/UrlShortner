@@ -68,7 +68,7 @@ export default function Dashboard() {
       )}
 
       <Grid container spacing={3}>
-        <Grid xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }} >
           <CreateUrlForm onSuccess={fetchAll} />
         </Grid>
       </Grid>
