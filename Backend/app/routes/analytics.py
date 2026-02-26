@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import URL, Click
-from app import db
+from app.extensions import db
 from sqlalchemy import func
 from datetime import datetime
 
