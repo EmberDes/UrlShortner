@@ -5,6 +5,10 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from config import Config
 from flask_cors import CORS
+from app.routes.auth import auth_bp
+from app.routes.urls import url_bp
+from app.routes.analytics import analytics_bp
+
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -17,7 +21,7 @@ def create_app():
     app.config.from_object(Config)
 
 
-    CORS(app,origins=["http://localhost:5173"])
+    CORS(app,origins=["https://url-shortner-kt7c.vercel.app/"])
 
 
 
@@ -26,12 +30,23 @@ def create_app():
     bcrypt.init_app(app)
     jwt.init_app(app)
 
-    from app.routes.auth import auth_bp
-    from app.routes.urls import url_bp
-    from app.routes.analytics import analytics_bp
+    
 
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
     app.register_blueprint(url_bp, url_prefix="/api/urls")
     app.register_blueprint(analytics_bp, url_prefix="/api/analytics")
+
+    @app.route("/health")
+    def health():
+            return {"status": "Backend running"}
+    @app.route("/db-test")
+    def db_test():
+        try:
+            db.session.execute("SELECT 1")
+            return {"db": "connected"}
+        except Exception as e:
+            return {"error": str(e)}
+
+
 
     return app
