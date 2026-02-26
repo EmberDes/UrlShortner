@@ -12,10 +12,8 @@ from app.routes.analytics import analytics_bp
 from app.extensions import db, migrate, bcrypt, jwt
 
 
-db = SQLAlchemy()
-migrate = Migrate()
-bcrypt = Bcrypt()
-jwt = JWTManager()
+
+
 
 def create_app():
     
@@ -24,7 +22,11 @@ def create_app():
 
 
     CORS(app,origins=["https://url-shortner-kt7c.vercel.app/"])
-
+    
+    db.init_app(app)
+    migrate.init_app(app, db)
+    bcrypt.init_app(app)
+    jwt.init_app(app)
 
 
 
