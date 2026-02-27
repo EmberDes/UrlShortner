@@ -49,6 +49,10 @@ def create_app():
             return {"db": "connected"}
         except Exception as e:
             return {"error": str(e)}
+        
+    with app.app_context():
+        db.create_all()
+
 
 
 
