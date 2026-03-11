@@ -23,7 +23,7 @@ def create_app():
 
     CORS(
     app,
-    resources={r"/api/*": {"origins": "https://url-shortner-kt7c.vercel.app"}},
+    resources={r"/api/*": {"origins": "https://url-shortner-fa74.vercel.app"}},
     supports_credentials=True
     )
     
