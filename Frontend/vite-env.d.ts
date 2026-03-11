@@ -1,1 +1,0 @@
-VITE_API_URL=https://urlshortner-f9uw.onrender.com
