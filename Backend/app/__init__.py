@@ -21,7 +21,11 @@ def create_app():
     app.config.from_object(Config)
 
 
-    CORS(app,origins=["https://url-shortner-fa74.vercel.app"])
+    CORS(
+    app,
+    resources={r"/api/*": {"origins": "https://url-shortner-kt7c.vercel.app"}},
+    supports_credentials=True
+    )
     
     db.init_app(app)
     migrate.init_app(app, db)
